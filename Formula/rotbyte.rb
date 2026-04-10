@@ -5,7 +5,7 @@ class Rotbyte < Formula
   sha256 "ee78920aedfa42527200691ed39d12febcd3d8c0607a62382f1647d2be0ae2a1"
   license "MIT"
 
-  depends_on "python@3.13"
+  depends_on "python@3.14"
 
   def install
     # Install the main script
@@ -14,7 +14,7 @@ class Rotbyte < Formula
     # Create a wrapper that invokes Python
     (bin/"rotbyte").write_env_script(
       libexec/"rotbyte.py",
-      PATH: "#{Formula["python@3.13"].opt_bin}:${PATH}"
+      PATH: "#{Formula["python@3.14"].opt_bin}:${PATH}"
     )
 
     # Man page
