@@ -4,10 +4,10 @@
 # Formula for MuxMaster (muxm) — video encoding/muxing utility
 # https://github.com/TheBluWiz/MuxMaster
 class Muxm < Formula
-  desc "Universal video encoder/muxer for DV, HDR10, HLG, and SDR with format profiles"
+  desc "Universal video encoder/muxer for AV1, DV, HDR10, HLG, and SDR with format profiles"
   homepage "https://github.com/TheBluWiz/MuxMaster"
-  url "https://github.com/TheBluWiz/MuxMaster/archive/refs/tags/v1.3.0.tar.gz"
-  sha256 "0dbae006700fc7548249fece34ccd8ec67352aad63f3c7f1112fa6552597f35e"
+  url "https://github.com/TheBluWiz/MuxMaster/archive/refs/tags/v1.4.0.tar.gz"
+  sha256 "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   license :cannot_represent # MuxMaster Freeware License v1.0.1
 
   depends_on "bash"   # macOS ships bash 3.2; muxm requires 4.3+
@@ -23,6 +23,7 @@ class Muxm < Formula
   # These are not declared as depends_on because muxm auto-disables
   # features when they're absent. Users can install as needed:
   #   brew install dovi_tool gpac tesseract
+  #   brew install svt-av1 libaom        # AV1 encoding profiles
 
   def install
     # Rewrite shebang from /usr/bin/env bash to Homebrew's bash 4.3+
@@ -56,11 +57,13 @@ class Muxm < Formula
         brew install dovi_tool         # Dolby Vision RPU handling
         brew install gpac              # DV container signaling (MP4Box)
         brew install tesseract         # PGS subtitle OCR
+        brew install svt-av1           # AV1 encoding (SVT-AV1)
 
       For subtitle burn-in (--sub-burn-forced), ffmpeg must be built with
-      libass. The simplest option:
+      libass. For AV1 encoding, ffmpeg must be built with --with-svt-av1
+      and --with-libaom. The simplest option:
 
-        brew install ffmpeg-full       # includes libass + tesseract
+        brew install ffmpeg-full       # includes libass, tesseract, and AV1 support
 
       Or run: muxm --install-dependencies
     EOS
