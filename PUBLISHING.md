@@ -33,7 +33,7 @@ https://github.com/<owner>/<repo>/archive/refs/tags/v1.0.0.tar.gz
 ### Step 2: Get the SHA256 hash
 
 ```bash
-curl -sL https://github.com/<owner>/<repo>/archive/refs/tags/v1.0.0.tar.gz \
+curl -sL https://github.com/TheBluWiz/rotbyte/archive/refs/tags/v1.0.0.tar.gz \
   | shasum -a 256
 ```
 
