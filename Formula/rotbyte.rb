@@ -1,8 +1,8 @@
 class Rotbyte < Formula
   desc "Guard your files against silent data corruption (bit rot)"
   homepage "https://github.com/TheBluWiz/RotByte"
-  url "https://github.com/TheBluWiz/RotByte/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "d3fdf6d0604a3816607026267cdd4212eaaae194d0b946419a4cad239851a764"
+  url "https://github.com/TheBluWiz/RotByte/archive/refs/tags/v1.1.0.tar.gz"
+  sha256 "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   license "MIT"
 
   depends_on "python@3.14"
