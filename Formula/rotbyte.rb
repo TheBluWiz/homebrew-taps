@@ -1,44 +1,64 @@
 class Rotbyte < Formula
-    desc "Guard your files against silent data corruption (bit rot)"
-    homepage "https://github.com/TheBluWiz/RotByte"
-    url "https://github.com/TheBluWiz/RotByte/archive/refs/tags/v1.2.1.tar.gz"
-    sha256 "ca1fb44af565125438c407ec90937a88987a7d66dbbdeeb266c852195b0e91d8"
-    license "MIT"
+  desc "Guard your files against silent data corruption (bit rot)"
+  homepage "https://github.com/TheBluWiz/RotByte"
+  url "https://github.com/TheBluWiz/RotByte/archive/refs/tags/v1.2.1.tar.gz"
+  sha256 "ca1fb44af565125438c407ec90937a88987a7d66dbbdeeb266c852195b0e91d8"
+  license "MIT"
 
-    depends_on "python@3.14"
-  
-    def install
-      # Install the entry point and its sibling package
-      libexec.install "rotbyte.py", "_rotbyte"
-  
-      # Wrapper that puts python@3.14 first on PATH so the script's
-      # `#!/usr/bin/env python3` shebang resolves to the right interpreter
-      (bin/"rotbyte").write_env_script(
-        libexec/"rotbyte.py",
-        PATH: "#{Formula["python@3.14"].opt_bin}:${PATH}"
-      )
+  depends_on "python@3.14"
 
-      # Man page
-      man1.install "rotbyte.1"
+  def install
+    # Install the entry point and its sibling package
+    libexec.install "rotbyte.py", "_rotbyte"
 
-      # Shell completions
-      zsh_completion.install "completions/_rotbyte"
-      bash_completion.install "completions/rotbyte_completions.bash" => "rotbyte"
-      fish_completion.install "completions/rotbyte_completions.fish" => "rotbyte.fish"
-    end
+    # Wrapper that puts python@3.14 first on PATH so the script's
+    # `#!/usr/bin/env python3` shebang resolves to the right interpreter
+    (bin/"rotbyte").write_env_script(
+      libexec/"rotbyte.py",
+      PATH: "#{formula_opt_bin("python@3.14")}:${PATH}",
+    )
 
-    test do
-      # Create a temp directory with a test file, run rotbyte, verify it indexes
-      (testpath/"data/hello.txt").write("hello world")
-      system bin/"rotbyte", testpath/"data"
-      assert_predicate testpath/"data/.data_rotbyte.db", :exist?
+    # Man pages: rotbyte.1 plus the section-7 conceptual guides
+    man1.install "man/rotbyte.1"
+    man7.install "man/rotbyte-notify.7", "man/rotbyte-permissions.7"
 
-      # Verify --report works
-      output = shell_output("#{bin}/rotbyte --report #{testpath}/data")
-      assert_match "OK", output
+    # Setup guides (also readable in the terminal via `rotbyte --docs`)
+    doc.install Dir["docs/*.md"]
 
-      # Verify --json works
-      json_output = shell_output("#{bin}/rotbyte --json #{testpath}/data")
-      assert_match "\"status\"", json_output
-    end
+    # Shell completions
+    zsh_completion.install "completions/_rotbyte"
+    bash_completion.install "completions/rotbyte_completions.bash" => "rotbyte"
+    fish_completion.install "completions/rotbyte_completions.fish" => "rotbyte.fish"
   end
+
+  def caveats
+    <<~EOS
+      Setup guides are available in the terminal:
+        rotbyte --docs              # list topics
+        rotbyte --docs notify       # email notifications
+        rotbyte --docs permissions  # macOS Full Disk Access
+        rotbyte --docs scheduler    # Windows Task Scheduler
+
+      They are also installed under #{doc}, and notify/permissions as
+      man pages (man rotbyte-notify, man rotbyte-permissions).
+    EOS
+  end
+
+  test do
+    # Create a temp directory with a test file, run rotbyte, verify it indexes
+    (testpath/"data/hello.txt").write("hello world")
+    system bin/"rotbyte", testpath/"data"
+    assert_path_exists testpath/"data/.data_rotbyte.db"
+
+    # Verify --report works
+    output = shell_output("#{bin}/rotbyte --report #{testpath}/data")
+    assert_match "OK", output
+
+    # Verify --json works
+    json_output = shell_output("#{bin}/rotbyte --json #{testpath}/data")
+    assert_match "\"status\"", json_output
+
+    # Verify the bundled --docs guides were packaged and are reachable
+    assert_match "notify", shell_output("#{bin}/rotbyte --docs")
+  end
+end
