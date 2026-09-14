@@ -6,8 +6,8 @@
   class Muxm < Formula
     desc "Universal video encoder/muxer for DV, HDR10, HLG, and SDR with format profiles"
     homepage "https://github.com/TheBluWiz/MuxMaster"
-    url "https://github.com/TheBluWiz/MuxMaster/archive/refs/tags/v1.6.1.tar.gz"
-    sha256 "b4dadec1bac87209bb826cd2d9f4568f228201f7015bdb07e1045d3782d28c59"
+    url "https://github.com/TheBluWiz/MuxMaster/archive/refs/tags/v1.6.2.tar.gz"
+    sha256 "3ba5abfe49c16ac5083d3c5898cc74d0759b1bdf24e37ce68845d12d35b42373"
     license :cannot_represent # MuxMaster Freeware License v1.0.1
 
     depends_on "bash"   # macOS ships bash 3.2; muxm requires 4.3+
